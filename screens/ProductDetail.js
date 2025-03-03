@@ -1,15 +1,40 @@
 import React from "react";
-import { View, Text, Image, StyleSheet, Button } from "react-native";
-import odeChairImage from "../Images/ode_chair.png";
+import { View, Text, Image, StyleSheet, Button, TouchableOpacity } from "react-native";
 
-const ProductDetail = ({navigation}) => {
+
+const ProductDetail = ({route}) => {
+    const { title, description, price } = route.params;
+    const [quantity, setQuantity] = React.useState(1);
+
+    const increaseQuantity = () => {
+        setQuantity(quantity + 1);
+    };
+    const decreaseQuantity = () => {
+        if (quantity > 1) {
+            setQuantity(quantity - 1);
+        }
+    };
+
+
     return (
         <View style={styles.container}>
-        <Image source={odeChairImage} style={styles.image} />
-        <Text style={styles.title}>Ode Chair</Text>
-        <Text style={styles.description}>zwart, orion taupe12</Text>
-        <Text style={styles.price}>Vanaf €399</Text>
-        <Button title="Add to cart" onPress={() => navigation.navigate("Home")} />
+        <Text style={styles.title}>{title}</Text>
+        <Text style={styles.description}>{description}</Text>
+        <Text style={styles.price}>Vanaf €{price}</Text>
+
+        <View style={styles.quantitycontainer}>
+        <TouchableOpacity onPress={decreaseQuantity}>
+            <Text style={styles.quantityText}>-</Text>
+        </TouchableOpacity>
+
+        <Text style={styles.quantity}>{quantity}</Text>
+
+        <TouchableOpacity onPress={increaseQuantity}>
+            <Text style={styles.quantityText}>+</Text>
+        </TouchableOpacity>
+
+        <Text style={styles.price}>€{price * quantity}</Text>
+        </View>
         </View>
     );
 }
@@ -43,6 +68,10 @@ const styles = StyleSheet.create({
         fontSize: 14,
         color:"#555",
         marginTop: 38,
+    },
+    quantitycontainer: {
+        flexDirection: "row",
+        marginTop: 16,
     },
 });
 
