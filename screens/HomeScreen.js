@@ -1,5 +1,5 @@
 import React from "react";
-import { ScrollView, View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { ScrollView, View, Text, StyleSheet } from "react-native";
 import ProductCard from "../components/ProductCard.js";
 
 import odeChairImage from "../Images/ode_chair.png";
@@ -7,7 +7,7 @@ import houtenKastImage from "../Images/houten_kast.png";
 import fauteuilsImage from "../Images/fauteuils.png";
 import houtenTafelImage from "../Images/houten_tafel.png";
 
-const HomeScreen = ({navigation}) => {
+const HomeScreen = ({ navigation }) => {
     return (
         <ScrollView contentContainerStyle={styles.container}>
           <View style={styles.container}>
@@ -17,29 +17,47 @@ const HomeScreen = ({navigation}) => {
             title="Ode Chair"
             description="zwart, orion taupe12"
             price= "399"
+            onPress={() => 
+              navigation.navigate("Details", {
+                title: "Ode Chair",
+               description: "zwart, orion taupe12",
+                price: "399"
+              })
+            }
           />
-           <TouchableOpacity onPress={() => navigation.navigate("Details")}>
-                <Text style={styles.button}>Details</Text>
-            </TouchableOpacity>
           <ProductCard
             image={houtenKastImage}
             title="Modular Cabinet MC-5L"
             description="Eiken hardwax olie naturel light 3041"
             price="1759"
+            onPress={() => navigation.navigate("Details", {
+              title: "Modular Cabinet MC-5L",
+              description: "Eiken hardwax olie naturel light 3041",
+              price: "1759"
+            })}
+
           />
           <ProductCard 
             image={fauteuilsImage}
             title="Co lounge chair"
             description="Eiken gerookt gebeitst, orion turtle88"
             price="889"
-            onPress={() => navigation.navigate("Details")}
+            onPress={() => navigation.navigate("Details", {
+              title: "Co lounge chair",
+              description: "Eiken gerookt gebeitst, orion turtle88",
+              price: "889"
+            })}
           />
           <ProductCard 
             image={houtenTafelImage}
             title="Paste Eettafel"
             description="Eiken naturel lak, Eiken naturel lak"
             price="1909"
-            onPress={() => navigation.navigate("Details")}
+            onPress={() => navigation.navigate("Details", {
+              title: "Paste Eettafel",
+              description: "Eiken naturel lak, Eiken naturel lak",
+              price: "1909"
+            })}
           />
           </View>
         </ScrollView>
