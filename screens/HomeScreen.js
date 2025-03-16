@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import { ScrollView, View, Text, StyleSheet } from "react-native";
 import ProductCard from "../components/ProductCard.js";
 
@@ -8,57 +8,45 @@ import fauteuilsImage from "../Images/fauteuils.png";
 import houtenTafelImage from "../Images/houten_tafel.png";
 
 const HomeScreen = ({ navigation }) => {
+  const [products, setProducts] = useState([]);
+
+  useEffect(() => {
+    fetch(
+      "https://api.webflow.com/v2/sites/67a7d5bdbfa15f3fc3e17029/products",
+      {
+        headers: {
+          Authorization:
+          "Bearer 617f3ab81f0e29c762af61c9290ae8b5307cc8f51d45305820c2d87da6205d55",
+        },
+      }
+    )
+    .then((response) => response.json())
+    .then((data) =>
+      setProducts(data.items.map((item) => ({
+        id: item.product.id,
+        title: item.product.fieldData.name,
+        subtitle: item.product.fieldData.description,
+        price: (item.skus[0]?.fieldData.price.value || 0) / 100,
+        image: {uri: item.skus[0]?.fieldData["main-image"]?.url},
+      }))
+    )
+  )
+    .catch((error) => console.error(error));
+  }, []);
+
     return (
         <ScrollView contentContainerStyle={styles.container}>
           <View style={styles.container}>
           <Text style={styles.heading}>Our Collection</Text>
+          {products.map((product) => (
           <ProductCard 
-            image={odeChairImage}
-            title="Ode Chair"
-            description="zwart, orion taupe12"
-            price= "399"
-            onPress={() => 
-              navigation.navigate("Details", {
-                title: "Ode Chair",
-               description: "zwart, orion taupe12",
-                price: "399"
-              })
-            }
+            image={product.image}
+            title={product.title}
+            description={product.subtitle}
+            price={product.price}
+            onPress={() => navigation.navigate("Details", product)}
           />
-          <ProductCard
-            image={houtenKastImage}
-            title="Modular Cabinet MC-5L"
-            description="Eiken hardwax olie naturel light 3041"
-            price="1759"
-            onPress={() => navigation.navigate("Details", {
-              title: "Modular Cabinet MC-5L",
-              description: "Eiken hardwax olie naturel light 3041",
-              price: "1759"
-            })}
-
-          />
-          <ProductCard 
-            image={fauteuilsImage}
-            title="Co lounge chair"
-            description="Eiken gerookt gebeitst, orion turtle88"
-            price="889"
-            onPress={() => navigation.navigate("Details", {
-              title: "Co lounge chair",
-              description: "Eiken gerookt gebeitst, orion turtle88",
-              price: "889"
-            })}
-          />
-          <ProductCard 
-            image={houtenTafelImage}
-            title="Paste Eettafel"
-            description="Eiken naturel lak, Eiken naturel lak"
-            price="1909"
-            onPress={() => navigation.navigate("Details", {
-              title: "Paste Eettafel",
-              description: "Eiken naturel lak, Eiken naturel lak",
-              price: "1909"
-            })}
-          />
+          ))}
           </View>
         </ScrollView>
       );
